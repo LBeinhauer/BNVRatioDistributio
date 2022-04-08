@@ -2,10 +2,11 @@
 
 
 
-# PDFs of:
+# Probability Density Functions of:
 
 # uncorrelated central normal ratio #
 
+# pdf of bivariate uncorrelated gaussian with means 0
 p_uncor_cent_xy <- function(x, y){
   (1/sqrt(2*pi)) * exp(-(1/2)*x^2) * (1/sqrt(2*pi)) * exp(-(1/2)*y^2)
 } 
@@ -13,7 +14,7 @@ p_uncor_cent_xy <- function(x, y){
 
 p_uncor_cent_xy(0, 0)
 
-
+# pdf of ratio Z = X/Y
 p_uncor_cent <- function(z){
   (1/(pi))/(1 + z^2)
 }
@@ -24,6 +25,7 @@ p_uncor_cent(0)
 
 # uncorrelated non-central normal ratio
 
+# pdf of ratio Z = X/Y, with non-zero means
 p_uncor <- function(z, sig_y, sig_x, mu_x, mu_y){
   
   a <- sqrt((1/(sig_x^2))*(z^2) + (1/(sig_y^2)))
@@ -46,6 +48,7 @@ p_uncor(1, 1, 1, 1, 1)
 
 # correlated central normal ratio
 
+# pdf of ratio Z = X/Y, with zero means and correlated variables
 p_cor_cent <- function(z, sig_y, sig_x, cor){
   
   alph <- cor*(sig_x/sig_y)
@@ -80,7 +83,7 @@ z = (xadj + (cor*y*(sig_x/sig_y)) + mu_x)/(y + mu_y)
 
 # comples gaussian ratio distribution (Baxley)
 
-# if 
+# if ...
 
 
 
