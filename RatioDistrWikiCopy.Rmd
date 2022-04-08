@@ -1,0 +1,99 @@
+---
+title: "Summary/Copy Wikipedia"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# The following is a reproduction/copy of https://en.wikipedia.org/wiki/Ratio_distribution, in order to understand the equations better \& practice with LaTeX.
+
+
+## Uncorrelated central normal ratio:
+
+X \& Y independent, each with Gaussian distribution with mean = 0. 
+
+Form of their ratio is a cauchy-distribution. Shown by setting $Z = \frac{X}{Y} = tan(\theta)$ and showing that $\theta$ has circular symmetry (why?).
+
+Bivariate:
+
+\begin{align}
+  p(x, y) &= \frac{1}{\sqrt{2\pi}} * exp(-\frac{1}{2}x^2) * exp(-\frac{1}{2}y^2)\\
+          &= \frac{1}{\sqrt{2\pi}} * exp(-\frac{1}{2}(x^2 + y^2))\\
+          &= \frac{1}{\sqrt{2\pi}} * exp(-\frac{1}{2}f^2)
+\end{align}
+
+with $f^2 = x^2 + y^2$
+
+
+if $p(x, y)$ is a function of only $f$, then $\theta$ is uniformly distributed on $[0, 2\pi]$ with density $\frac{1}{2\pi}$ so the problem reduces to finding the probaility distribution of Z under mapping $Z = \frac{X}{Y} = tan(\theta)$.
+
+By conservation of probability we have
+
+$p_z(z) = \frac{p_\theta(\theta)}{|dz/d\theta|} = \frac{1}{2\pi} cos^2(\theta)$
+
+and setting $cos^2(\theta) = \frac{1}{1 + (tan(\theta))^2} = \frac{1}{1 + x^2}$ we get
+
+$p_z(z) = \frac{1/2\pi}{1 + z^2}$
+
+there is a spurious factor of 2 here - two values of $\theta$ spaced by $\pi$ onto the same value of z $\rightarrow$ density doubled and final result is:
+
+$p_z(z) = \frac{1/2\pi}{1 + z^2}$, $-\infty < z < \infty$
+
+When either of the two distributions is noncentral $\rightarrow$ result much more complicated, given below in succinct form presented by David Hinkley.
+
+
+Sampling 1000 values from two independent gaussian distributions with mean 0 and sd .5 leads to:
+
+```{r sim uncor central, echo=FALSE}
+set.seed(0304)
+
+x <- rnorm(1000, mean = 0, sd = .5)
+y <- rnorm(1000, mean = 0, sd = .5)
+
+plot(density(x/y))
+```
+
+
+## Uncorrelated noncentral normal ratio:
+
+
+if $cor(x, y) = 0$, two gaussian independent distributions of the two variables $X \sim \mathcal{N}(\mu_x, \sigma_x^2)$ and $Y \sim \mathcal{N}(\mu_y, \sigma_y^2)$, the ratio of $Z = \frac{X}{Y}$ is given exactly by the following expression:
+
+$$p_z(z) = \frac{b(z) * d(z)}{a^3(z)} * \frac{1}{\sqrt{2\pi}\sigma_x\sigma_y}*[\Phi(\frac{b(z)}{a(z)}) - \Phi(-\frac{(z)}{a(z)})] + \frac{1}{a^3(z)*\pi\sigma_x\sigma_y}*e^{c\frac{c}{2}}$$
+
+where
+
+$a(z) = \sqrt{\frac{1}{\sigma_x^2}z^2 + \frac{1}{\sigma_y^2}}$
+
+$b(z) = \frac{\mu_x}{\sigma_x^2}z^2 + \frac{\mu_y}{\sigma_y^2}$
+
+$c = \frac{\mu_x}{\sigma_x^2} + \frac{\mu_y}{\sigma_y^2}$
+
+$d(z) = exp(\frac{b^2(z) - ca^2(z)}{2a^2(z)})$
+
+
+and $\Phi$ is the normal cumulative distribution function:
+
+$\Phi(t) = \int_{-\inf}^t \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}u^2}du$
+
+
+Under certain conditions, a normal approximation is possible with variance :
+
+$\sigma_z^2 = \frac{\mu_x^2}{\mu_y^2}(\frac{\sigma_x^2}{\mu_x^2} + \frac{\sigma_y^2}{\mu_y^2})$
+
+
+
+
+Sampling 1000 values from two independent gaussian distributions with mean 2 and sd .5 leads to:
+
+```{r sim uncor noncentral, echo=FALSE}
+
+x <- rnorm(1000, mean = 2, sd = .5)
+y <- rnorm(1000, mean = 2, sd = .5)
+
+plot(density(x/y))
+```
+
+
