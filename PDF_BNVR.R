@@ -30,7 +30,7 @@ p_uncor <- function(z, sig_y, sig_x, mu_x, mu_y){
   
   a <- sqrt((1/(sig_x^2))*(z^2) + (1/(sig_y^2)))
   
-  b <- sqrt((mu_x/(sig_x^2))*z + (mu_y/(sig_y^2)))
+  b <- ((mu_x/(sig_x^2))*z + (mu_y/(sig_y^2)))
   
   c <- ((mu_x^2)/(sig_x^2)) + ((mu_y^2)/(sig_y^2))
   
