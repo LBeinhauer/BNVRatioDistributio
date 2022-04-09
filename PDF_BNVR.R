@@ -86,9 +86,9 @@ z = (xadj + (cor*y*(sig_x/sig_y)) + mu_x)/(y + mu_y)
 
 
 
+# combining all situations into a single function!
 
-
-pdfBNVR <- function(z, sig_y = 1, sig_x = 1, mu_x = 0, mu_y = 0, cor = 0){
+dbnvr <- function(z, sig_y = 1, sig_x = 1, mu_x = 0, mu_y = 0, cor = 0){
   
   # uncorrelated central
   if(cor == 0 & sum((c(mu_x, mu_y) == 0)) == 2){
@@ -117,36 +117,49 @@ pdfBNVR <- function(z, sig_y = 1, sig_x = 1, mu_x = 0, mu_y = 0, cor = 0){
   
 }
 
+
+
+# testing the function for different situations, plot the resulting densities
+
+
+# uncorrelated, central (r = 0, means = 0, sds = 1)
+
 mat <- matrix(NA, nrow = length(seq(-3, 3, .1)), ncol = 2)
 
 for(i in 1:length(seq(-3, 3, .1))){
   z <- seq(-3, 3, .1)[i]
-  mat[i,1] <- pdfBNVR(z = z)[1]
+  mat[i,1] <- dbnvr(z = z)[1]
   mat[i,2] <- z
 }
 
 plot(mat[,2], mat[,1])
 
 
+# uncorrelated, non-central (r = 0, means = 10, sds = 3)
+
 for(i in 1:length(seq(-3, 3, .1))){
   z <- seq(-3, 3, .1)[i]
-  mat[i,1] <- pdfBNVR(z = z, mu_x = 10, mu_y = 10, sig_x = 3, sig_y = 3)[1]
+  mat[i,1] <- dbnvr(z = z, mu_x = 10, mu_y = 10, sig_x = 3, sig_y = 3)[1]
   mat[i,2] <- z
 }
 
 plot(mat[,2], mat[,1])
 
 
+# correlated, central (r =.5, means = 0, sds = 1)
 
 for(i in 1:length(seq(-3, 3, .1))){
   z <- seq(-3, 3, .1)[i]
-  mat[i,1] <- pdfBNVR(z = z, mu_x = 0, mu_y = 0, sig_x = 1, sig_y = 1, cor = .5)[1]
+  mat[i,1] <- dbnvr(z = z, mu_x = 0, mu_y = 0, sig_x = 1, sig_y = 1, cor = .5)[1]
   mat[i,2] <- z
 }
 
 
-pdfBNVR(z = 0, mu_x = 1, mu_y = 0, sig_x = 1, sig_y = 1, cor = .5)
+dbnvr(z = 0, mu_x = 1, mu_y = 0, sig_x = 1, sig_y = 1, cor = .5)
 
 
+dbnvr(0)
+dnorm(0)
 
-
+dbnvr(1)
+dnorm(1)
