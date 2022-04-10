@@ -119,6 +119,42 @@ dbnvr <- function(z, sig_y = 1, sig_x = 1, mu_x = 0, mu_y = 0, cor = 0){
 
 
 
+
+
+pbnvr <- function(z, sig_y = 1, sig_x = 1, mu_x = 0, mu_y = 0, cor = 0){
+  
+  # uncorrelated central
+  if(cor == 0 & sum((c(mu_x, mu_y) == 0)) == 2){
+    dens <- function(x){p_uncor_cent(x)}
+    
+    p <- integrate(dens, lower = -Inf, upper = z)
+  }
+  
+  # uncorrelated non-central
+  if(cor == 0 & sum((c(mu_x, mu_y) == 0)) != 2){
+    dens <- function(x){p_uncor(x, sig_y, sig_x, mu_x, mu_y)}
+    
+    p <- integrate(dens, lower = -Inf, upper = z)
+  }
+  
+  # correlated central
+  if(cor != 0 & sum((c(mu_x, mu_y) == 0)) == 2){
+    dens <- function(x){p_cor_cent(x, sig_y, sig_x, cor)}
+    
+    p <- integrate(dens, lower = -Inf, upper = z)
+  }
+  
+  # correlated non-central
+  if(cor != 0 & sum((c(mu_x, mu_y) == 0)) != 2){
+    stop("PDF for Ratio of correlated, non-central bivariate normal distribution currently not implemented!")
+  }
+  
+  p
+  
+}
+
+
+
 # testing the function for different situations, plot the resulting densities
 
 
@@ -135,6 +171,12 @@ for(i in 1:length(seq(-3, 3, .1))){
 plot(mat[,2], mat[,1])
 
 
+pbnvr(z = 0)
+pbnvr(z = 1)
+pbnvr(z = -1)
+
+
+
 # uncorrelated, non-central (r = 0, means = 10, sds = 3)
 
 for(i in 1:length(seq(-3, 3, .1))){
@@ -144,6 +186,17 @@ for(i in 1:length(seq(-3, 3, .1))){
 }
 
 plot(mat[,2], mat[,1])
+
+
+pbnvr(z = 0, mu_x = 10, mu_y = 10, sig_x = 3, sig_y = 3)
+pbnvr(z = 1, mu_x = 10, mu_y = 10, sig_x = 3, sig_y = 3)
+pbnvr(z = -1, mu_x = 10, mu_y = 10, sig_x = 3, sig_y = 3)
+
+
+pbnvr(z = 0, mu_x = 5, mu_y = 10, sig_x = 1.5, sig_y = 3)
+pbnvr(z = 1, mu_x = 5, mu_y = 10, sig_x = 1.5, sig_y = 3)
+pbnvr(z = -1, mu_x = 5, mu_y = 10, sig_x = 1.5, sig_y = 3)
+
 
 
 # correlated, central (r =.5, means = 0, sds = 1)
@@ -156,6 +209,18 @@ for(i in 1:length(seq(-3, 3, .1))){
 
 
 dbnvr(z = 0, mu_x = 1, mu_y = 0, sig_x = 1, sig_y = 1, cor = .5)
+
+
+pbnvr(z = 0, mu_x = 0, mu_y = 0, sig_x = 3, sig_y = 3, cor = .5)
+pbnvr(z = 1, mu_x = 0, mu_y = 0, sig_x = 3, sig_y = 3, cor = .5)
+pbnvr(z = -1, mu_x = 0, mu_y = 0, sig_x = 3, sig_y = 3, cor = .5)
+
+
+pbnvr(z = 0, mu_x = 0, mu_y = 0, sig_x = 1.5, sig_y = 3, cor = .3)
+pbnvr(z = 1, mu_x = 0, mu_y = 0, sig_x = 1.5, sig_y = 3, cor = .3)
+pbnvr(z = -1, mu_x = 0, mu_y = 0, sig_x = 1.5, sig_y = 3, cor = .3)
+
+
 
 
 dbnvr(0)
